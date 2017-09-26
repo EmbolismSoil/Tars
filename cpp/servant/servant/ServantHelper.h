@@ -78,7 +78,23 @@ public:
         }
         _servant_creator[id] = new ServantCreation<T>();
     }
-
+    
+    void addServant(const string& id, ServantHelperCreationPtr creator, bool check = false)
+    {
+        if(check && _servant_adapter.end() == _servant_adapter.find(id))
+        {
+            cerr<<"[TARS]ServantHelperManager::addServant "<< id <<" not find adapter.(maybe not conf in the web)"<<endl;
+            throw runtime_error("[TARS]ServantHelperManager::addServant " + id + " not find adapter.(maybe not conf in the web)");
+        }
+        
+        if (creator){
+            _servant_creator[id] = creator;
+        }else{
+            cerr << "[TARS]ServantHelperManager::addServant " << id << " creator should not be nullptr."  << endl;
+            throw runtime_error("[TARS]ServantHelperManager::addServant " << id << " creator should not be nullptr.");
+        }
+    }
+ 
     /**
      * 生成Servant
      * @param id
